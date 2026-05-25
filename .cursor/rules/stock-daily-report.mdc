@@ -1,0 +1,20 @@
+---
+description: 用户说 Stock 或 美股收盘日报 时，生成与 Cursor 手动版完全一致的全文
+globs:
+  - reports/**
+  - prompts/**
+  - templates/**
+alwaysApply: false
+---
+
+# Stock 日报（唯一任务）
+
+当用户消息为 **Stock**、**美股收盘日报**、或要求生成收盘复盘时：
+
+1. **只读** `prompts/STOCK_DAILY_REPORT.md`，严格按其中 0–15 节生成完整中文 Markdown。
+2. 多源检索（CNBC、Reuters、FRED、FedWatch、密歇根调查等），注明链接；不得编造。
+3. 写入 `reports/YYYY-MM-DD.md`（美股交易日）。
+4. **不要**运行 GitHub Actions、不要配 OpenAI Key、不要用 scripts 简表代替全文。
+5. 除非用户明确要求，**不要**改代码、workflow、邮件或其它文件。
+
+质量目标：与用户在 Cursor 对话中手动获得的《美股收盘日报》同一标准。
