@@ -1,9 +1,9 @@
-name: US Market Daily Report
+# 默认请用 Cursor Cloud Agent 生成完整日报，见 docs/CURSOR_CLOUD_AGENT_SETUP.zh.md
+# 本 workflow 仅保留：可选的数据抓取（无需 OpenAI Key），不自动生成简版/LLM 报告。
+
+name: US Market Daily (optional data fetch)
 
 on:
-  schedule:
-    - cron: "0 8 * * 2-6"
-      timezone: Asia/Shanghai
   workflow_dispatch:
     inputs:
       session_date:
@@ -14,51 +14,41 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: us-market-daily
-  cancel-in-progress: false
-
 jobs:
-  generate-report:
+  fetch-data-only:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 15
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - run: pip install -r requirements.txt
 
-      - name: Generate full daily report (Cursor parity)
+      - name: Fetch market data JSON (optional helper for Cloud Agent)
         env:
           SESSION_DATE: ${{ github.event.inputs.session_date }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o' }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
           SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
         run: |
-          cd "${GITHUB_WORKSPACE}"
-          export PYTHONPATH=scripts
+          mkdir -p data
           if [ -n "$SESSION_DATE" ]; then
-            python3 scripts/generate_full_daily_report.py --date "$SESSION_DATE"
+            python3 scripts/fetch_market_data.py --date "$SESSION_DATE" --out "data/${SESSION_DATE}.json"
           else
-            python3 scripts/generate_full_daily_report.py
+            python3 scripts/fetch_market_data.py --out data/latest.json
           fi
 
-      - name: Commit and push report
+      - name: Commit data snapshot
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet reports/; then
-            echo "No report changes to commit."
+          git add data/ || true
+          if git diff --staged --quiet; then
+            echo "No data changes."
             exit 0
           fi
-          git add reports/
-          git commit -m "chore(reports): full US market daily report $(date -u +%Y-%m-%d)"
+          git commit -m "chore(data): market snapshot $(date -u +%Y-%m-%d)"
           git push

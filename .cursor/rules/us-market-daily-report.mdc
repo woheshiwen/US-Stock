@@ -1,0 +1,20 @@
+---
+description: 生成美股收盘日报（15节完整版，与 Cloud Agent 定时任务一致）
+globs:
+  - reports/**
+  - templates/**
+  - prompts/**
+alwaysApply: false
+---
+
+# 美股收盘日报（Cloud Agent）
+
+当用户要求生成「美股收盘日报」「收盘复盘」「daily report」或触发定时任务时：
+
+1. 阅读 `templates/REPORT_SPEC_zh.md` 与 `templates/STYLE_REFERENCE_zh.md`。
+2. 按规范完成 **0–15 节** 完整 Markdown，写入 `reports/YYYY-MM-DD.md`（美股交易日）。
+3. 多源检索（CNBC、Reuters、FRED、FedWatch、密歇根调查等），注明来源；不得编造。
+4. 第 12 节必须覆盖 `prompts/cloud-agent-daily-task.txt` 中的关注池（含 NOK）。
+5. 提交到 `main`：`reports:` 前缀 commit；除非用户要求，不要开 PR。
+
+定时配置见 `docs/CURSOR_CLOUD_AGENT_SETUP.zh.md`。
