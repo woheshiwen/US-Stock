@@ -113,7 +113,7 @@ def last_nyse_session(as_of: date | None = None) -> date:
         if not schedule.empty:
             return schedule.index[-1].date()
     d = as_of
-    for _ in range 10):
+    for _ in range(10):
         if d.weekday() < 5:
             return d
         d -= timedelta(days=1)
