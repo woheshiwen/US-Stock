@@ -2,8 +2,9 @@ name: US Market Daily Report
 
 on:
   schedule:
-    # 北京时间 周二–周六 08:00 → 对应 Mon–Fri 美股收盘后
+    # 北京时间 每周二–周六 08:00（上一美股交易日）
     - cron: "0 8 * * 2-6"
+      timezone: Asia/Shanghai
   workflow_dispatch:
     inputs:
       session_date:
