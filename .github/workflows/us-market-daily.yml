@@ -2,7 +2,6 @@ name: US Market Daily Report
 
 on:
   schedule:
-    # 北京时间 每周二–周六 08:00（上一美股交易日）
     - cron: "0 8 * * 2-6"
       timezone: Asia/Shanghai
   workflow_dispatch:
@@ -22,7 +21,7 @@ concurrency:
 jobs:
   generate-report:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,14 +35,20 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Generate report
+      - name: Generate full daily report (Cursor parity)
         env:
           SESSION_DATE: ${{ github.event.inputs.session_date }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o' }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
         run: |
+          cd "${GITHUB_WORKSPACE}"
+          export PYTHONPATH=scripts
           if [ -n "$SESSION_DATE" ]; then
-            python scripts/generate_us_market_report.py --date "$SESSION_DATE"
+            python3 scripts/generate_full_daily_report.py --date "$SESSION_DATE"
           else
-            python scripts/generate_us_market_report.py
+            python3 scripts/generate_full_daily_report.py
           fi
 
       - name: Commit and push report
@@ -55,5 +60,5 @@ jobs:
             exit 0
           fi
           git add reports/
-          git commit -m "chore(reports): US market daily report $(date -u +%Y-%m-%d)"
+          git commit -m "chore(reports): full US market daily report $(date -u +%Y-%m-%d)"
           git push
