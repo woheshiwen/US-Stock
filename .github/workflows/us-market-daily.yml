@@ -1,0 +1,59 @@
+name: US Market Daily Report
+
+on:
+  schedule:
+    # 北京时间 每周二–周六 08:00（上一美股交易日）
+    - cron: "0 8 * * 2-6"
+      timezone: Asia/Shanghai
+  workflow_dispatch:
+    inputs:
+      session_date:
+        description: "NYSE session date (YYYY-MM-DD), empty = last session"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: us-market-daily
+  cancel-in-progress: false
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate report
+        env:
+          SESSION_DATE: ${{ github.event.inputs.session_date }}
+        run: |
+          if [ -n "$SESSION_DATE" ]; then
+            python scripts/generate_us_market_report.py --date "$SESSION_DATE"
+          else
+            python scripts/generate_us_market_report.py
+          fi
+
+      - name: Commit and push report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet reports/; then
+            echo "No report changes to commit."
+            exit 0
+          fi
+          git add reports/
+          git commit -m "chore(reports): US market daily report $(date -u +%Y-%m-%d)"
+          git push
