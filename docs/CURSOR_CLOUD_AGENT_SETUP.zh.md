@@ -102,3 +102,46 @@
 - [ ] 用 `prompts/cloud-agent-daily-task.txt` 试跑成功  
 - [ ] `reports/YYYY-MM-DD.md` 已出现在 `main`  
 - [ ]（可选）Automations cron `0 8 * * 2-6` @ Asia/Shanghai 已启用  
+
+---
+
+## 八、定时跑 + 自动发邮件（推荐组合）
+
+Cursor **不能**直接把整份日报发到邮箱（邮件一般是「任务完成」通知 + 链接）。  
+推荐：**Cursor 定时写 `reports/` → push 到 `main` → GitHub 自动发邮件**。
+
+### 流程
+
+```text
+Cursor Automations（每天 08:00）
+    → Cloud Agent 生成 reports/YYYY-MM-DD.md
+    → git push 到 main
+    → GitHub Actions「Email US Market Daily Report」
+    → 邮件发到你的邮箱
+```
+
+### 你需要配置的 GitHub Secrets
+
+**Settings → Secrets and variables → Actions → New secret**
+
+| Secret | 说明 |
+|--------|------|
+| `REPORT_EMAIL_TO` | 你的收件邮箱，例如 `you@gmail.com` |
+| `RESEND_API_KEY` | 在 [resend.com](https://resend.com) 注册后创建 API Key（有免费额度） |
+| `REPORT_EMAIL_FROM` | （可选）发件人，须为 Resend 已验证域名；测试可用 `onboarding@resend.dev`（仅发往你在 Resend 注册的邮箱） |
+
+合并含 `email-report.yml` 的分支后，**第一次** Agent push 新 `reports/*.md` 时会触发发信。
+
+### Cursor 定时（再确认）
+
+- [cursor.com/automations](https://cursor.com/automations)
+- Cron：`0 8 * * 2-6`，时区 `Asia/Shanghai`
+- 指令：粘贴 `prompts/cloud-agent-daily-task.txt`
+- **Work on current branch = main**，**不要**只开 PR 不合并（否则邮件 workflow 不会触发）
+
+### 收不到邮件时检查
+
+1. `main` 上是否真有新的 `reports/xxx.md`（不是只在 PR 里）
+2. Actions 里 **Email US Market Daily Report** 是否成功（黄字 warning = 没配 Secret）
+3. Resend 测试发件人 `onboarding@resend.dev` 只能发到 Resend 账号邮箱
+4. 看垃圾邮件箱

@@ -35,3 +35,6 @@
 git add reports/
 git commit -m "reports: US market daily YYYY-MM-DD"
 git push origin main
+
+## 邮件（由 GitHub 自动发送）
+推送 `reports/YYYY-MM-DD.md` 到 `main` 后，仓库 Actions 会把该文件发到配置的邮箱（无需你在本任务里发邮件）。
