@@ -1,0 +1,98 @@
+name: US Market Daily Report
+
+on:
+  schedule:
+    # 北京时间 每周二–周六 08:00（上一美股交易日收盘数据）
+    - cron: "0 8 * * 2-6"
+      timezone: Asia/Shanghai
+  workflow_dispatch:
+    inputs:
+      session_date:
+        description: "NYSE session date (YYYY-MM-DD), empty = last session"
+        required: false
+        type: string
+      skip_email:
+        description: "Skip sending email (true/false)"
+        required: false
+        default: "false"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: us-market-daily
+  cancel-in-progress: false
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Chromium and CJK fonts (PDF)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq chromium-browser fonts-noto-cjk fonts-wqy-microhei
+
+      - name: Generate Markdown report
+        id: report
+        env:
+          SESSION_DATE: ${{ github.event.inputs.session_date }}
+        run: |
+          if [ -n "$SESSION_DATE" ]; then
+            python scripts/generate_us_market_report.py --date "$SESSION_DATE"
+          else
+            python scripts/generate_us_market_report.py
+          fi
+          SESSION=$(ls -t reports/*.md 2>/dev/null | head -1 | xargs -r basename | sed 's/\.md$//')
+          if [ -z "$SESSION" ]; then
+            echo "No report file produced." >&2
+            exit 1
+          fi
+          echo "session_date=$SESSION" >> "$GITHUB_OUTPUT"
+          echo "Report session: $SESSION"
+
+      - name: Build PDF
+        run: python scripts/md_to_pdf.py "reports/${{ steps.report.outputs.session_date }}.md"
+
+      - name: Commit and push report
+        id: push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "reports/${{ steps.report.outputs.session_date }}.md" \
+                  "reports/${{ steps.report.outputs.session_date }}.pdf"
+          if git diff --staged --quiet; then
+            echo "No report changes to commit."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "chore(reports): US market daily ${{ steps.report.outputs.session_date }} (md+pdf)"
+          git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Email PDF download link
+        if: >-
+          steps.push.outputs.pushed == 'true' &&
+          github.event.inputs.skip_email != 'true'
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          REPORT_EMAIL_TO: ${{ secrets.REPORT_EMAIL_TO }}
+          REPORT_EMAIL_FROM: ${{ secrets.REPORT_EMAIL_FROM }}
+        run: |
+          python scripts/send_report_email.py \
+            --date "${{ steps.report.outputs.session_date }}" \
+            --repo "${{ github.repository }}" \
+            --branch "${{ github.ref_name }}"
