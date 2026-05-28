@@ -17,7 +17,7 @@
 | **定时** | 北京时间 **每周二至周六 08:00**（对应上一美股交易日） |
 | **产出** | `reports/YYYY-MM-DD.md` + `reports/YYYY-MM-DD.pdf` |
 | **推送** | 自动 commit 到 **默认分支**（`main`） |
-| **邮件** | 推送成功后，通过 [Resend](https://resend.com/) 发送 **PDF 直接下载链接** |
+| **邮件** | 通过 [Resend](https://resend.com/) 发送 **PDF 邮件附件**（私有仓库请用附件，勿点 raw 链接） |
 | **手动** | GitHub → **Actions** → **US Market Daily Report** → **Run workflow** |
 
 自动版为 **Yahoo Finance 数据摘要**（指数、板块 ETF、Mag7、关注列表含 NOK 等）；深度叙事仍以 Cursor `Stock` 为准。
@@ -34,9 +34,12 @@
 
 合并本 PR 到 `main` 后，定时任务才会在默认分支上运行。
 
-邮件中的 PDF 链接格式示例：
+邮件附件文件名：`us-market-daily-YYYY-MM-DD.pdf`（请直接打开附件）。
 
-`https://github.com/woheshiwen/ben/raw/main/reports/2026-05-26.pdf`
+> **私有仓库：** `github.com/.../raw/...` 链接在未登录时会下载到 404 网页，可能被存成 `2026-05-27---.pdf`。请使用邮件附件。
+
+仓库若为 Public，可用：  
+`https://raw.githubusercontent.com/woheshiwen/ben/main/reports/2026-05-26.pdf`
 
 ### 本地试跑
 

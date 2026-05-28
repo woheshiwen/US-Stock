@@ -1,24 +1,47 @@
 #!/usr/bin/env python3
-"""Send daily report email with GitHub raw PDF download link (Resend API)."""
+"""Send daily report email with PDF attachment (Resend API)."""
 
 from __future__ import annotations
 
 import argparse
+import base64
 import os
 import sys
+from pathlib import Path
 
 import requests
 
 RESEND_API = "https://api.resend.com/emails"
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def raw_url(repo: str, branch: str, session_date: str, ext: str) -> str:
-    return f"https://github.com/{repo}/raw/{branch}/reports/{session_date}.{ext}"
+    return (
+        f"https://raw.githubusercontent.com/{repo}/{branch}/"
+        f"reports/{session_date}.{ext}"
+    )
+
+
+def github_file_url(repo: str, branch: str, session_date: str, ext: str) -> str:
+    return (
+        f"https://github.com/{repo}/blob/{branch}/"
+        f"reports/{session_date}.{ext}"
+    )
+
+
+def attachment_filename(session_date: str) -> str:
+    # ASCII filename for Windows / Outlook compatibility
+    return f"us-market-daily-{session_date}.pdf"
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--date", required=True, help="NYSE session YYYY-MM-DD")
+    parser.add_argument(
+        "--pdf",
+        type=Path,
+        help="Path to PDF file (default: reports/YYYY-MM-DD.pdf)",
+    )
     parser.add_argument(
         "--repo",
         default=os.environ.get("GITHUB_REPOSITORY", ""),
@@ -27,7 +50,7 @@ def main() -> int:
     parser.add_argument(
         "--branch",
         default=os.environ.get("GITHUB_REF_NAME", "main"),
-        help="Branch for raw links (default: GITHUB_REF_NAME)",
+        help="Branch for optional links (default: GITHUB_REF_NAME)",
     )
     args = parser.parse_args()
 
@@ -45,30 +68,68 @@ def main() -> int:
         )
         return 0
 
-    if not args.repo:
-        print("GITHUB_REPOSITORY / --repo required for download links.", file=sys.stderr)
+    session = args.date
+    pdf_path = (args.pdf or REPO_ROOT / "reports" / f"{session}.pdf").resolve()
+
+    if not pdf_path.is_file():
+        print(f"PDF not found: {pdf_path}", file=sys.stderr)
         return 1
 
-    session = args.date
-    pdf_url = raw_url(args.repo, args.branch, session, "pdf")
-    md_url = raw_url(args.repo, args.branch, session, "md")
+    pdf_bytes = pdf_path.read_bytes()
+    if not pdf_bytes.startswith(b"%PDF"):
+        print(f"File is not a valid PDF: {pdf_path}", file=sys.stderr)
+        return 1
+
+    attach_name = attachment_filename(session)
+    attachments = [
+        {
+            "filename": attach_name,
+            "content": base64.b64encode(pdf_bytes).decode("ascii"),
+        }
+    ]
+
+    repo = args.repo
+    branch = args.branch
+    pdf_link = raw_url(repo, branch, session, "pdf") if repo else ""
+    md_link = raw_url(repo, branch, session, "md") if repo else ""
+    blob_link = github_file_url(repo, branch, session, "pdf") if repo else ""
 
     subject = f"美股收盘日报 {session}（PDF）"
     html_body = f"""
 <div style="font-family: sans-serif; line-height: 1.6; color: #111;">
   <h2>美股收盘日报 · {session}</h2>
-  <p>今日自动报告已生成并推送到仓库 <code>{args.repo}</code>（分支 <code>{args.branch}</code>）。</p>
-  <p><strong>PDF 直接下载：</strong><br>
-    <a href="{pdf_url}">{pdf_url}</a>
+  <p><strong>PDF 已附在本邮件</strong>，文件名：<code>{attach_name}</code>（请直接打开附件，勿依赖网页链接）。</p>
+  <p style="color:#444;font-size:14px;">
+    说明：本仓库为<strong>私有仓库</strong>时，GitHub 的「直接下载链接」在未登录浏览器中会返回 404 页面，
+    可能被误存为乱码文件名（例如 <code>2026-05-27---.pdf</code>）。请一律使用邮件附件。
   </p>
-  <p><strong>Markdown 备份：</strong><br>
-    <a href="{md_url}">{md_url}</a>
+"""
+
+    if repo:
+        html_body += f"""
+  <p><strong>仓库内查看（需 GitHub 登录）：</strong><br>
+    <a href="{blob_link}">{blob_link}</a>
   </p>
+  <p style="color:#666;font-size:13px;">
+    若仓库已设为 Public，也可尝试 raw 链接：<br>
+    <a href="{pdf_link}">{pdf_link}</a>
+  </p>
+"""
+
+    html_body += """
   <p style="color:#666;font-size:13px;">
     本邮件由 GitHub Actions 自动发送。完整 15 节深度版仍可在 Cursor 中输入 <code>Stock</code> 生成。
   </p>
 </div>
 """
+
+    payload: dict = {
+        "from": from_email,
+        "to": [to_email],
+        "subject": subject,
+        "html": html_body,
+        "attachments": attachments,
+    }
 
     resp = requests.post(
         RESEND_API,
@@ -76,20 +137,18 @@ def main() -> int:
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
         },
-        json={
-            "from": from_email,
-            "to": [to_email],
-            "subject": subject,
-            "html": html_body,
-        },
-        timeout=30,
+        json=payload,
+        timeout=60,
     )
 
     if resp.status_code >= 400:
         print(f"Resend error {resp.status_code}: {resp.text}", file=sys.stderr)
         return 1
 
-    print(f"Email sent to {to_email} (id={resp.json().get('id', '?')})")
+    print(
+        f"Email sent to {to_email} with attachment {attach_name} "
+        f"({len(pdf_bytes)} bytes, id={resp.json().get('id', '?')})"
+    )
     return 0
 
 

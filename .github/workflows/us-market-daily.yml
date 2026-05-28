@@ -83,10 +83,11 @@ jobs:
           git push
           echo "pushed=true" >> "$GITHUB_OUTPUT"
 
-      - name: Email PDF download link
+      - name: Email report PDF (attachment)
         if: >-
-          steps.push.outputs.pushed == 'true' &&
-          github.event.inputs.skip_email != 'true'
+          github.event.inputs.skip_email != 'true' &&
+          (steps.push.outputs.pushed == 'true' ||
+           github.event_name == 'workflow_dispatch')
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           REPORT_EMAIL_TO: ${{ secrets.REPORT_EMAIL_TO }}
@@ -94,5 +95,6 @@ jobs:
         run: |
           python scripts/send_report_email.py \
             --date "${{ steps.report.outputs.session_date }}" \
+            --pdf "reports/${{ steps.report.outputs.session_date }}.pdf" \
             --repo "${{ github.repository }}" \
             --branch "${{ github.ref_name }}"
