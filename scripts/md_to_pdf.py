@@ -4,6 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
+import http.server
+import socket
+import threading
 import shutil
 import subprocess
 import sys
@@ -71,23 +75,49 @@ ul {{ padding-left: 1.4em; }}
 
 def html_to_pdf(html_path: Path, pdf_path: Path, chromium: str) -> None:
     pdf_path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory() as profile_dir:
-        cmd = [
-            chromium,
-            "--headless=new",
-            "--disable-gpu",
-            "--no-sandbox",
-            "--disable-dev-shm-usage",
-            f"--user-data-dir={profile_dir}",
-            "--no-pdf-header-footer",
-            f"--print-to-pdf={pdf_path}",
-            f"file://{html_path.resolve()}",
-        ]
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        if result.returncode != 0:
-            raise RuntimeError(
-                f"PDF export failed ({result.returncode}): {result.stderr[-2000:]}"
-            )
+    # GitHub-hosted runners sometimes fail to load `file://...` URLs in headless Chromium,
+    # producing a PDF with ERR_FILE_NOT_FOUND. Serve the HTML over localhost instead.
+    handler = http.server.SimpleHTTPRequestHandler
+    directory = str(html_path.parent.resolve())
+
+    class _Handler(handler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, directory=directory, **kwargs)
+
+        def log_message(self, format, *args):  # noqa: A003
+            return
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("127.0.0.1", 0))
+        host, port = s.getsockname()
+
+    httpd = http.server.ThreadingHTTPServer(("127.0.0.1", port), _Handler)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+
+    try:
+        url = f"http://127.0.0.1:{port}/{html_path.name}"
+        with tempfile.TemporaryDirectory() as profile_dir:
+            cmd = [
+                chromium,
+                "--headless=new",
+                "--disable-gpu",
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                f"--user-data-dir={profile_dir}",
+                "--no-pdf-header-footer",
+                f"--print-to-pdf={pdf_path}",
+                url,
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            if result.returncode != 0:
+                raise RuntimeError(
+                    f"PDF export failed ({result.returncode}): {result.stderr[-2000:]}"
+                )
+    finally:
+        with contextlib.suppress(Exception):
+            httpd.shutdown()
+            httpd.server_close()
 
 
 def main() -> int:
