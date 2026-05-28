@@ -1,4 +1,4 @@
-# ben
+# US-Stock
 
 美股收盘日报：Cursor 手动深度版 + GitHub Actions 自动 PDF 邮件版。
 
