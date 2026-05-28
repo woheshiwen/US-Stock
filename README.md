@@ -1,25 +1,52 @@
 # ben
 
-## 唯一用法：在 Cursor 里手动跑 Stock 日报
+美股收盘日报：Cursor 手动深度版 + GitHub Actions 自动 PDF 邮件版。
 
-1. 用 Cursor 打开本仓库 `woheshiwen/ben`
-2. 在 Agent 输入框发送：
+## 一、Cursor 手动版（完整 15 节）
 
-```text
-Stock
+1. 用 **Cursor** 打开本仓库  
+2. 在 Agent / Composer 输入：`Stock`  
+3. 按 [`prompts/STOCK_DAILY_REPORT.md`](prompts/STOCK_DAILY_REPORT.md) 生成 `reports/YYYY-MM-DD.md`（含新闻、FedWatch、机构观点等）
+
+## 二、自动定时 + Email（方案 A）
+
+工作流：[`.github/workflows/us-market-daily.yml`](.github/workflows/us-market-daily.yml)
+
+| 项目 | 说明 |
+|------|------|
+| **定时** | 北京时间 **每周二至周六 08:00**（对应上一美股交易日） |
+| **产出** | `reports/YYYY-MM-DD.md` + `reports/YYYY-MM-DD.pdf` |
+| **推送** | 自动 commit 到 **默认分支**（`main`） |
+| **邮件** | 推送成功后，通过 [Resend](https://resend.com/) 发送 **PDF 直接下载链接** |
+| **手动** | GitHub → **Actions** → **US Market Daily Report** → **Run workflow** |
+
+自动版为 **Yahoo Finance 数据摘要**（指数、板块 ETF、Mag7、关注列表含 NOK 等）；深度叙事仍以 Cursor `Stock` 为准。
+
+### 配置 GitHub Secrets（必做）
+
+在仓库 **Settings → Secrets and variables → Actions** 添加：
+
+| Secret | 说明 |
+|--------|------|
+| `RESEND_API_KEY` | [Resend](https://resend.com/api-keys) API Key |
+| `REPORT_EMAIL_TO` | 收件邮箱（您的地址） |
+| `REPORT_EMAIL_FROM` | 发件人，如 `日报 <reports@yourdomain.com>`（须在 Resend 验证域名；测试可用 `onboarding@resend.dev`） |
+
+合并本 PR 到 `main` 后，定时任务才会在默认分支上运行。
+
+邮件中的 PDF 链接格式示例：
+
+`https://github.com/woheshiwen/ben/raw/main/reports/2026-05-26.pdf`
+
+### 本地试跑
+
+```bash
+pip install -r requirements.txt
+python scripts/generate_us_market_report.py
+python scripts/md_to_pdf.py reports/2026-05-22.md
+
+# 试发邮件（需 export 环境变量）
+export RESEND_API_KEY=...
+export REPORT_EMAIL_TO=you@example.com
+python scripts/send_report_email.py --date 2026-05-22 --repo woheshiwen/ben --branch main
 ```
-
-或：
-
-```text
-按 prompts/STOCK_DAILY_REPORT.md 生成最新美股收盘日报
-```
-
-3. 报告输出在：**`reports/YYYY-MM-DD.md`**
-
-完整规范见：**[prompts/STOCK_DAILY_REPORT.md](prompts/STOCK_DAILY_REPORT.md)**
-
----
-
-与 Cursor 聊天里手动生成的日报相同：15 节全文、多源引用、固定关注池（含 NOK）。  
-**不要**使用 `scripts/` 或 GitHub Actions 生成简表；那些不是本项目的交付物。
