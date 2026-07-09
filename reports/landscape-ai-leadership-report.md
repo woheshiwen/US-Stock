@@ -3,7 +3,7 @@
 **汇报人：** IT 负责人（协助公司 AI 提效推进）  
 **汇报对象：** 公司领导层  
 **日期：** 2026年7月8日  
-**版本：** v3.2.1（领导汇报版）
+**版本：** v3.2.2（领导汇报版）
 
 ---
 
@@ -314,16 +314,105 @@ DD 为合同节点时，若最低交付标准不明确，可能出现**为满足
 
 ### 6.2 调研中提及的工具类型（不构成采购建议）
 
-以下名称仅记录调研来源，**不代表公司应采购或已评估完成**：
+以下名称仅记录调研来源，**不代表公司应采购或已评估完成**。下表为四类方向摘要；**6.3、6.4 节附公开参考链接**，便于领导或同事自行查阅，**不代表本人已试用或推荐采购**。
 
-- 通用图纸审阅与标准对照类平台（如行业中的 Nomic、UptoCode 等）  
-- PDF 图纸对比类功能（如 Bluebeam Smart Overlay 等）  
-- 景观 CAD 生态中的标注检查、树木保护等插件（如 Land F/X、CanopyCode 等）  
-- 开源或自建的 DWG 检查方案（如 AI-2D-Checker、AutoCAD MCP 等）  
+| 方向 | 海外调研样例 | 内地类似方向（见 6.4） |
+|------|-------------|------------------------|
+| 图纸审阅与标准对照 | Nomic、UptoCode | 小智审图、万翼 AI 审图、图智、PKPM-AIChecker 等 |
+| PDF 图纸版本对比 | Bluebeam Smart Overlay | PDF 快速看图、工程易览 PDF、协筑等 |
+| 景观 CAD 插件 | Land F/X、CanopyCode | 中望景园、科创易达、杰图园林绿化等 |
+| 开源 / 自建 DWG 检查 | AI-2D-Checker、AutoCAD MCP | LibreDWG、ezdxf、开源审图项目、IT 自建规则等 |
 
 **我的态度：** 后期工具须先选 1–2 个场景、用真实项目做小范围试点，再判断是否推广。**目前不宜下结论说「应全面引入」。**
 
-### 6.3 若领导同意试点，我建议的验证路径
+### 6.3 海外及行业公开工具参考链接（待验证）
+
+> 链接来自公开官网或文档，**仅供溯源**；部分为商业产品需试用/询价，开源项目需自行评估维护状态。
+
+#### （1）通用图纸审阅与标准对照
+
+| 工具 | 参考链接 | 备注 |
+|------|----------|------|
+| Nomic | [官网](https://www.nomic.ai/) · [图纸审阅介绍](https://www.nomic.ai/ai-for/construction/drawing-review) · [产品文档](https://docs.nomic.ai/docs/capabilities/drawing-review) | AEC 领域 AI 审图平台 |
+| UptoCode | [官网](https://uptocode.ai/) · [BIM/IFC 功能](https://uptocode.ai/bim-ifc-compliance) | 图纸/BIM 规范合规检查 |
+
+#### （2）PDF 图纸对比
+
+| 工具 | 参考链接 | 备注 |
+|------|----------|------|
+| Bluebeam Smart Overlay | [使用说明](https://support.bluebeam.com/revu/how-to/use-smart-overlay.html) · [FAQ](https://support.bluebeam.com/revu/resources/smart-overlay-review-faq.html) · [文档准备](https://support.bluebeam.com/revu/how-to/prepare-your-documents-for-smart-overlay-review.html) | Bluebeam Max 计划功能 |
+| Bluebeam 传统对比 | [Overlay Pages 说明](https://support.bluebeam.com/revu/features/compare-documents-vs-overlay-pages.html) | 非 Max 可用 |
+| Bluebeam 官网 | [bluebeam.com](https://www.bluebeam.com/) | 产品总入口 |
+
+#### （3）景观 CAD 生态插件
+
+| 工具 | 参考链接 | 备注 |
+|------|----------|------|
+| Land F/X | [官网](https://www.landfx.com/) · [产品介绍](https://www.landfx.com/kb/admin-issues/info/7295-what-is-landfx) · [安装门户](https://www.landfx.com/portal) | AutoCAD/Revit/SketchUp/Rhino |
+| CanopyCode | [产品页](https://landcode.co/canopycode/) · [用户手册](https://landcode.co/docs/canopycode/) · [开发商](https://landcode.co/) | 树木保护图自动化（AutoCAD/Civil 3D） |
+
+#### （4）开源或自建 DWG 检查
+
+| 工具 | 参考链接 | 备注 |
+|------|----------|------|
+| AI-2D-Checker | [GitHub](https://github.com/emjiZzz/ai-2d-checker) | 本地 DWG/DXF + AI 合规检查（Windows） |
+| AutoCAD MCP（多项目） | [U-C4N/autocad-mcp](https://github.com/U-C4N/autocad-mcp) · [best-cad-mcp](https://github.com/LokmenoWer/best-cad-mcp) · [puran-water/autocad-mcp](https://github.com/puran-water/autocad-mcp) | MCP 协议 + CAD 自动化，需 IT 评估选型 |
+
+### 6.4 内地类似工具参考链接（待验证）
+
+> 内地在 **AI 审图、PDF 对比、园林 CAD 算量标注** 上积累较多，但**景观专项 AI 审图、境外标准对照、树木保护自动化**等与 6.3 海外样例并非一一对应，更宜**分场景拼装**，而非指望单一「国产平替」。
+
+#### （1）图纸审阅与规范对照（对应 Nomic、UptoCode）
+
+| 产品/方案 | 参考链接 | 特点简述 |
+|-----------|----------|----------|
+| 小智审图 | [xzst360.com](https://www.xzst360.com/) | 设计院施工图自检；支持 CAD |
+| 万翼 AI 审图 | [vaiplus.com](https://www.vaiplus.com/) · [万翼科技](https://www.vanyitech.com/) | 大型地产/企业项目；跨文件校验 |
+| 图智 TuZhi.AI | [tuzhi.ai](https://tuzhi.ai/) · [清华技术转移介绍](https://ott.tsinghua.edu.cn/info/1074/1506.htm) | PDF 识图 + 规范审查 + 可自定义规则 |
+| PKPM-AIChecker | [构力科技 pkpm.cn](https://www.pkpm.cn/) | 建研院体系；全专业 AI 审图 |
+| 广联达 BIM 施工图智能审查 | [产品页](https://www.glodon.com/product/356.html) · [解决方案](https://www.glodon.com/solution/165) | 二三维联审；偏行管与设计质量管控 |
+| 华为 × 构力审图一体机 | [华为新闻稿](https://e.huawei.com/cn/news/2025/industries/real-estate/knowledge-driven-image-review-intelligent) | 私有化部署路线（待了解） |
+
+#### （2）PDF 图纸版本对比（对应 Bluebeam Smart Overlay）
+
+| 产品 | 参考链接 | 能力简述 |
+|------|----------|----------|
+| 广联达 PDF 快速看图 | [pdf.glodon.com](https://pdf.glodon.com/) | 叠加对比、基准点对齐、测量批注 |
+| 工程易览 PDF | [gcyl.yunzhukeji.cn](https://gcyl.yunzhukeji.cn/) | 工程 PDF 看图；含文件叠加对比 |
+| 协筑（广联达） | [xz.glodon.com/product](https://xz.glodon.com/product) | 云端协作；新版本自动与上一版对比 |
+| 创享云 PDF 在线批注 | [cxytech.cn](https://www.cxytech.cn/pages/pdfa.html) | 企业级在线校审、批注回写 |
+
+#### （3）景观 CAD 插件（对应 Land F/X、CanopyCode）
+
+| 产品 | 参考链接 | 能力简述 |
+|------|----------|----------|
+| 中望景园 | [zwsoft.cn 产品页](https://www.zwsoft.cn/product/zwcad/landscape) | 苗木统计、规则树阵、缺漏/重叠检查 |
+| 科创易达园林绿化 | [官网](http://bjkcyd.net/pd.jsp?id=2) · [浩辰应用页](https://www.gstarcad.com/application/117/) | 自动标注、苗木表、道路绿化 |
+| 杰图园林绿化 | [jietusoft.com.cn](https://www.jietusoft.com.cn/) · [浩辰版](https://www.gstarcad.com/application/159/) | 乔灌统计、地被面积、土方等 |
+
+**说明：** 内地园林插件在**苗木标注算量**上较成熟；**树木保护专章自动化**（类似 CanopyCode 的 CRZ/SRP 与 LOD 相交分析）目前**少见成品**，多依赖地方规范 + 手工或定制脚本。
+
+#### （4）开源 / 自建 DWG 检查（对应 AI-2D-Checker、AutoCAD MCP）
+
+| 类型 | 参考链接 | 说明 |
+|------|----------|------|
+| ShipCAD-Review（架构可借鉴） | [GitHub](https://github.com/lijinhao567-blip/shipcad-review) | DXF/DWG 解析 + 规则引擎 + 版本对比 |
+| CAD-ML-Platform | [GitHub](https://github.com/zensgit/cad-ml-platform) | 含图纸 Diff、质量评分、LLM 辅助 |
+| LibreDWG | [gnu.org/software/libredwg](https://www.gnu.org/software/libredwg/) | DWG 解析底座 |
+| ezdxf | [GitHub](https://github.com/mozman/ezdxf) | Python DXF 处理，适合写检查规则 |
+| 构力 PKPM Agent | [pkpm.cn](https://www.pkpm.cn/) | 厂商智能体路线，非通用 MCP 开源方案 |
+
+### 6.5 内地与海外对照及试点优先级（建议，待验证）
+
+| 公司可能痛点 | 可优先了解的内地方向 | 与海外样例的差异 |
+|--------------|----------------------|------------------|
+| CD→DD 图纸版本差异 | PDF 快速看图、协筑 | 叠加对比成熟；AI 自动配页较弱 |
+| 施工图规范漏项自检 | 小智审图、万翼、PKPM-AIChecker | 偏国标/报审；景观专项与境外标准覆盖待验证 |
+| 苗木标注与算量 | 中望景园、杰图、科创易达 | 绑定中望/浩辰；与 Land F/X 完整套件不同 |
+| 树木保护专章 | 暂无同级成品 | 需定制或手工；CanopyCode 类工具内地少见 |
+| IT 自建检查规则 | ezdxf + 公司标准 + 大模型 | 技术可行；需小范围试点 |
+
+### 6.6 若领导同意试点，我建议的验证路径
 
 1. **第一步：** 选 DD 阶段「图纸健康检查」或「版本对比」单一场景；  
 2. **第二步：** 1–2 个项目、2–4 周试用，记录耗时与问题发现率；  
