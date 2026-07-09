@@ -2,6 +2,11 @@ name: Send XLSX Report Email
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/send-xlsx-report.yml'
+      - 'reports/2014年前项目全量报表.xlsx'
 
 jobs:
   send-email:
