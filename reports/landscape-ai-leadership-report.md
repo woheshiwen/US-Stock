@@ -3,7 +3,7 @@
 **汇报人：** IT 负责人（协助公司 AI 提效推进）  
 **汇报对象：** 公司领导层  
 **日期：** 2026年7月9日  
-**版本：** v4.0（重构版）
+**版本：** v4.1（重构版）
 
 ---
 
@@ -15,9 +15,8 @@
 
 1. 纠正我此前「推广热度不均」的片面理解，改为从**阶段、客户、区域、工具边界**系统看问题；  
 2. 统一阶段术语：**2TA → CD → DD → WD**（全文以 2TA 代替「概念」）；  
-3. 将同事**原话或接近原话的反馈**置于各节**附件**，正文仅保留我的归纳与建议；  
-4. 汇总后期 AI 工具调研链接（**均未验证**，不构成采购建议）；  
-5. 提出日报、返工记录、AI 心得分享等**试行方向**——具体日报格式我将尽快与 **Janice** 沟通确认后再推行。
+3. 汇总多地同事沟通要点及后期 AI 工具调研（**均未验证**，不构成采购建议）；  
+4. 提出日报、返工记录、AI 心得分享等**试行方向**——具体日报格式我将尽快与 **Janice** 沟通确认后再推行。
 
 **本文未做什么：** 不代表公司最终制度；不提出 AI 工具统一采购方案；不对任何团队或客户方作责任归属判断。
 
@@ -52,7 +51,7 @@ AI多    交底精    图纸化    落地出图
 ★ 衔接问题多集中在 CD → DD
 ```
 
-> **术语说明：** **CD = 方案设计**（非 Construction Design）。越南团队另用 PCD / FCD 等称呼，含义为 2TA 向 CD 递进中「由宽到细」的子步骤（见第四节及附件二）。
+> **术语说明：** **CD = 方案设计**（非 Construction Design）。越南团队另用 PCD / FCD 等称呼，含义为 2TA 向 CD 递进中「由宽到细」的子步骤（见第四节）。
 
 ### 3.2 分级交付与客户档位
 
@@ -76,25 +75,26 @@ AI多    交底精    图纸化    落地出图
 
 ### 3.4 内地高端住宅：反复修改与工时偏高（我的归纳）
 
-多名内地同事反馈：**高端住宅景观修改频次与工时高于海外同类项目**，主因多为**外部行业机制**，而非单一环节执行不力。六类外部共性原因与三类跨境协同痛点，详见**附件一**。对管理的含义：日报与返工宜区分**外部机制修改**与**内部交底/衔接不足**。
+多名内地同事反馈：**高端住宅景观修改频次与工时高于海外同类项目**，主因多为**外部行业机制**，而非单一环节执行不力。
 
-> **附件一：内地同事反馈摘录（结构化归纳）**  
->  
-> **一、外部行业客观共性（同行普遍面临）**  
-> 1. 头部房企**集团—区域—项目三级审批 + 多部门联合评审**；景观审美主观，非专业条线均可提意见；决策摇摆、管理层换届带来大范围修改；验收标准模糊；不配合修改易被卡流程与付款。  
-> 2. 甲方中层**前置预审**（避险式），我方难跳过，造成工序重复。  
-> 3. **高周转报规**：拿地即报批，轮廓总图与后期深化易割裂；补救先天缺陷或二次报规变更，工作量接近重做。  
-> 4. **市政与场地条件变动**：旧版测绘、河道/道路改造等，被动修改难度大。  
-> 5. **近 1–2 年景观风格跨越式迭代**，存量项目临近落地时品质追赶式升级。  
-> 6. 横向对比全球业务线，**内地投入时间人力高于东南亚、中东、欧美**，属阶段性国情。  
->  
-> **二、跨境分布式协同痛点（内部可优化方向）**  
-> 1. 方案在海外、落地在国内，**项目经理为关键衔接**；后期缺完整创作背景。  
-> 2. 进入施工图后方案人力收缩，**时差与响应滞后**；现场常先行调整后再二次修正。  
-> 3. 现场与方案**长效联动不足**：等反馈误工期，自主调整偏离方案。  
->  
-> **三、小结**  
-> 大部分高频修改来自外部客观因素；差异化增量中有一部分来自跨境协同短板——宜内部聚焦改善，不宜简单对外归因。
+**外部行业客观共性（同行普遍面临）：**
+
+| 序号 | 原因类型 | 要点 |
+|------|----------|------|
+| 1 | 多层级决策 + 审美主观 | 集团—区域—项目三级审批；景观审美主观；决策摇摆、管理层换届引发大范围修改；验收标准模糊 |
+| 2 | 甲方中层前置预审 | 避险式预审难以跳过，造成工序重复 |
+| 3 | 高周转报规 | 拿地即报批，轮廓总图与后期深化易割裂；补救或二次报规变更工作量接近重做 |
+| 4 | 市政与场地变动 | 旧版测绘、河道/道路改造等，被动修改难度大 |
+| 5 | 风格快速迭代 | 近 1–2 年景观品质跨越式提升，存量项目临近落地时追赶式升级 |
+| 6 | 内地市场阶段性国情 | 横向对比全球业务线，内地投入高于东南亚、中东、欧美 |
+
+**跨境分布式协同痛点（内部可优化方向）：**
+
+1. 方案在海外、落地在国内，**项目经理为关键衔接**；后期缺完整创作背景；  
+2. 进入施工图后方案人力收缩，时差与响应滞后；现场常先行调整后再二次修正；  
+3. 现场与方案长效联动不足：等反馈误工期，自主调整偏离方案。
+
+**对管理的含义：** 大部分高频修改来自外部客观因素；日报与返工宜区分**外部机制修改**与**内部交底/衔接不足**，不宜简单对外归因。
 
 ---
 
@@ -134,7 +134,7 @@ AI多    交底精    图纸化    落地出图
 | **Gemini / Gemini Pro** | 清晰度与稳定性评价较好 | **可优先对比** |
 | **Nano Banana 2**（口语「香蕉 2」） | 氛围感较好 | 与 Gemini **同 Prompt 先试再定** |
 
-详见**附件三**。
+**操作建议：** 同一参考图 + 同一 Prompt，先在多个模型各试 1–2 张，选定后再集中出图；稳定性因项目而异，不宜全公司固定单一模型。
 
 ### 4.4 实际难点（我的归纳）
 
@@ -145,51 +145,21 @@ AI多    交底精    图纸化    落地出图
 | **「不打磨」适用范围不一** | 未区分客户档位；2TA 与 CD 标准混淆 |
 | **2TA 出图「模糊」** | 更可能是**模型选择**问题，非仅分辨率参数 |
 | **项目活跃度变冷** | 缺结构化日报与 1–2 周滚动计划 |
-| **内地反复修改** | 外部机制为主（附件一）；须单独标注 |
-| **越南总图路径、工具边界** | 彩平仍 1+1 人天；依赖 Airi upscale；AI 记忆压缩 |
+| **内地反复修改** | 外部机制为主；须单独标注 |
+| **越南总图路径、工具边界** | 彩平仍约 2 人天；依赖 Airi upscale；AI 记忆压缩 |
 | **后期 AI 结构** | 读图/审图工具**本人尚未验证**（第六节） |
 
 ### 4.5 越南团队：新项目结构与 AI 试错（我的归纳）
 
-越南**新项目在公司占比较高**，多数处于 **2TA**。团队做法：**SU 极简草稿 + AI** 生成透视、剖面、轴测；但总图/彩平仍是痛点（约 2 人天，AI+PS 混合）。三大工具挑战：Airi upscale 依赖、ChatGPT 做 MOM 不足、模型上下文压缩难作全项目 Agent。最难处是**旧流程 vs 新流程**来回试探（2TA→FCD），有时比直接建模更慢，同时也在把 AI 往后期推——**质量与效率尚未稳定平衡**。
+越南**新项目在公司占比较高**，多数处于 **2TA**。团队做法：**SU 极简草稿 + AI** 生成透视、剖面、轴测；总图/彩平仍是痛点（大型项目约 **2 人天**：CAD 总图 + AI 彩平 + Photoshop 混合），纯 AI 路径尚难达预期。
 
-详见**附件二**。
+**三大工具挑战：** ① 较依赖 **Airi upscale**，替代方案不足；② **ChatGPT** 用于 **MOM 纪要提取**体验不足，倾向专用工具；③ 模型**上下文压缩**，难作贯穿全项目的强 Agent。
 
-> **附件二：越南同事 Tung 反馈摘录（2026年7月9日企业微信）**  
->  
-> **项目与阶段**  
-> - 「VN accounts for the majority of new projects… mostly conceptual stage」→ 对应 **2TA**。  
-> - 交付物：「mainly PDF, SU, and sometimes CAD」。  
-> - 全过程如 zoom-in：「2TA/PCD… mood & feeling → FCD key zones → DD typical detail → WD every detail on site」。  
->  
-> **AI 三大挑战**  
-> 1. 「We rely heavily on **Airi for upscale**. So far no other AI can beat them.」  
-> 2. 「We use **ChatGPT a lot**, but should have some issue for **recording extracted for MOM**. So we need to use another AI for this only.」  
-> 3. 「AI nowadays have some issues about **memory**… they tend to **compress** it… we will not be able to use as 1 strong agent AI as before.」  
->  
-> **2TA 工作流**  
-> - 「we try to **minimize the SU**, like a very draft model, then **dress it up with AI**… perspectives, section & isometric diagram.」  
-> - 总图：「from Philip's handsketch… **at least 1 day** for CAD plan… **1 more day** for color plan with AI… **mixing between AI & manual Photoshop**… **no shorter pathway**… AI plan usually **can not match with our expectation**.」  
->  
-> **客户与 SU/AI 平衡**  
-> - 「balancing between **AI & our manual work**, depend on the output Client want.」  
-> - 「This process will rely on **Designer's judgement**… where to stop developing SU & move on to AI.」  
-> - CD 阶段：「mostly **PDF**… also need **CAD file for coordination**」；「**AI still can not refine models & cad**… **assistance only**.」  
-> - Philip 方向：「the **earlier stage, the more AI**… the **latter stage, the less AI** with rendering, more for manual work.」  
->  
-> **最难之处**  
-> - 「the hardest is **daily pushback from using old tool & way of work**… resistance **within ourselves**.」  
-> - 「test what is the **limit detail** we can have… if AI can not satisfy… test how much **SU detail** we put in… **back and forth, cost us time**.」  
-> - 「**daily pushing, more and more AI to latter stage**… see how can we use AI more… balancing between requirements and efficiency.」
+**客户与 SU/AI 平衡：** 视客户要求而定——重细节须在 SU 精修后导出；重视觉可更多用 AI；设计师须判断「SU 做到哪里停、何时转 AI」，能力因人而异。
 
-> **附件三：2TA 出图模型——企业微信交流摘录**  
->  
-> - 「即使分辨率 maxed out，**this still happens**」（画面发糊）。  
-> - 「**every generation loses some details**」（同图反复生成逐次损细节）。  
-> - 模型或为「**CPT Image 2**」（即 ChatGPT Image 2）。  
-> - 建议尝试「**香蕉 2**」等；「**stability… depend on project**」——不宜全公司固定单一模型。  
-> - 做法：「**test the same prompt across different models** first… see which fits the project」。  
-> - 「**pro**… feels **more reliable**」（多指 Gemini Pro 一类）。
+**CD 阶段：** 对客以 PDF 为主，须向其他顾问提供 CAD；AI 可辅助检查与 VE，**尚不能精修模型与 CAD**。2TA 通过后客户常要求提交 CAD、SU 等全套文件供内部研读。
+
+**最难之处：** 旧流程 vs 新流程的**日常拉锯**（2TA→FCD）——先测 AI 精度上限、再回补 SU，来回试探有时比直接建模更慢；同时也在把 AI 往后期推，**质量与效率尚未稳定平衡**。阻力更多来自**工作习惯转型**，而非单一外部因素。
 
 ---
 
@@ -247,7 +217,7 @@ DD 节点须对齐**最低交付标准**与收款节点，避免为节点简化�
 
 ## 六、后期 AI 辅助工具——初步了解，**待验证**
 
-> 来自行业调研与公开信息；**本人及团队尚未完成系统性实测**；**不构成采购建议**。完整链接见**附件四**。
+> 来自行业调研与公开信息；**本人及团队尚未完成系统性实测**；**不构成采购建议**。
 
 | 方向 | 海外调研样例 | 内地类似方向 |
 |------|-------------|--------------|
@@ -260,29 +230,34 @@ DD 节点须对齐**最低交付标准**与收款节点，避免为节点简化�
 
 **试点路径：** ① 选 DD「图纸健康检查」或「版本对比」单一场景 → ② 1–2 项目、2–4 周试用 → ③ 提交验证报告后再议扩大。
 
-> **附件四：后期 AI 工具参考链接（待验证）**  
->  
-> **海外及行业**  
-> - Nomic：[nomic.ai](https://www.nomic.ai/) · [图纸审阅](https://www.nomic.ai/ai-for/construction/drawing-review) · [文档](https://docs.nomic.ai/docs/capabilities/drawing-review)  
-> - UptoCode：[uptocode.ai](https://uptocode.ai/) · [BIM/IFC](https://uptocode.ai/bim-ifc-compliance)  
-> - Bluebeam Smart Overlay：[使用说明](https://support.bluebeam.com/revu/how-to/use-smart-overlay.html) · [FAQ](https://support.bluebeam.com/revu/resources/smart-overlay-review-faq.html) · [官网](https://www.bluebeam.com/)  
-> - Land F/X：[landfx.com](https://www.landfx.com/) · [介绍](https://www.landfx.com/kb/admin-issues/info/7295-what-is-landfx)  
-> - CanopyCode：[landcode.co/canopycode](https://landcode.co/canopycode/) · [手册](https://landcode.co/docs/canopycode/)  
-> - AI-2D-Checker：[GitHub](https://github.com/emjiZzz/ai-2d-checker)  
-> - AutoCAD MCP：[U-C4N/autocad-mcp](https://github.com/U-C4N/autocad-mcp) · [best-cad-mcp](https://github.com/LokmenoWer/best-cad-mcp) · [puran-water/autocad-mcp](https://github.com/puran-water/autocad-mcp)  
->  
-> **内地类似**  
-> - 小智审图：[xzst360.com](https://www.xzst360.com/)  
-> - 万翼 AI 审图：[vaiplus.com](https://www.vaiplus.com/) · [vanyitech.com](https://www.vanyitech.com/)  
-> - 图智：[tuzhi.ai](https://tuzhi.ai/)  
-> - PKPM-AIChecker：[pkpm.cn](https://www.pkpm.cn/)  
-> - 广联达 BIM 审图：[产品页](https://www.glodon.com/product/356.html)  
-> - PDF 快速看图：[pdf.glodon.com](https://pdf.glodon.com/)  
-> - 工程易览 PDF：[gcyl.yunzhukeji.cn](https://gcyl.yunzhukeji.cn/)  
-> - 协筑：[xz.glodon.com/product](https://xz.glodon.com/product)  
-> - 中望景园：[zwsoft.cn/product/zwcad/landscape](https://www.zwsoft.cn/product/zwcad/landscape)  
-> - 科创易达：[bjkcyd.net](http://bjkcyd.net/pd.jsp?id=2)  
-> - 杰图：[jietusoft.com.cn](https://www.jietusoft.com.cn/)
+#### 6.1 海外及行业工具参考链接
+
+| 工具 | 参考链接 | 备注 |
+|------|----------|------|
+| Nomic | [官网](https://www.nomic.ai/) · [图纸审阅](https://www.nomic.ai/ai-for/construction/drawing-review) · [文档](https://docs.nomic.ai/docs/capabilities/drawing-review) | AEC 审图平台 |
+| UptoCode | [官网](https://uptocode.ai/) · [BIM/IFC](https://uptocode.ai/bim-ifc-compliance) | 规范合规检查 |
+| Bluebeam Smart Overlay | [使用说明](https://support.bluebeam.com/revu/how-to/use-smart-overlay.html) · [FAQ](https://support.bluebeam.com/revu/resources/smart-overlay-review-faq.html) | Bluebeam Max |
+| Bluebeam 官网 | [bluebeam.com](https://www.bluebeam.com/) | 产品总入口 |
+| Land F/X | [landfx.com](https://www.landfx.com/) · [介绍](https://www.landfx.com/kb/admin-issues/info/7295-what-is-landfx) | 景观 CAD 插件 |
+| CanopyCode | [产品页](https://landcode.co/canopycode/) · [手册](https://landcode.co/docs/canopycode/) | 树木保护自动化 |
+| AI-2D-Checker | [GitHub](https://github.com/emjiZzz/ai-2d-checker) | 开源 DWG 检查 |
+| AutoCAD MCP | [U-C4N](https://github.com/U-C4N/autocad-mcp) · [best-cad-mcp](https://github.com/LokmenoWer/best-cad-mcp) · [puran-water](https://github.com/puran-water/autocad-mcp) | MCP + CAD 自动化 |
+
+#### 6.2 内地类似工具参考链接
+
+| 产品 | 参考链接 | 能力简述 |
+|------|----------|----------|
+| 小智审图 | [xzst360.com](https://www.xzst360.com/) | 施工图自检 |
+| 万翼 AI 审图 | [vaiplus.com](https://www.vaiplus.com/) · [vanyitech.com](https://www.vanyitech.com/) | 企业级审图 |
+| 图智 TuZhi.AI | [tuzhi.ai](https://tuzhi.ai/) | PDF 识图 + 规范审查 |
+| PKPM-AIChecker | [pkpm.cn](https://www.pkpm.cn/) | 全专业 AI 审图 |
+| 广联达 BIM 审图 | [产品页](https://www.glodon.com/product/356.html) | 二三维联审 |
+| PDF 快速看图 | [pdf.glodon.com](https://pdf.glodon.com/) | 图纸叠加对比 |
+| 工程易览 PDF | [gcyl.yunzhukeji.cn](https://gcyl.yunzhukeji.cn/) | 工程 PDF 看图 |
+| 协筑 | [xz.glodon.com/product](https://xz.glodon.com/product) | 云端版本对比 |
+| 中望景园 | [zwsoft.cn](https://www.zwsoft.cn/product/zwcad/landscape) | 园林 CAD 算量标注 |
+| 科创易达 | [bjkcyd.net](http://bjkcyd.net/pd.jsp?id=2) | 园林绿化插件 |
+| 杰图园林绿化 | [jietusoft.com.cn](https://www.jietusoft.com.cn/) | 乔灌统计、土方等 |
 
 ---
 
@@ -303,9 +278,9 @@ DD 节点须对齐**最低交付标准**与收款节点，避免为节点简化�
 >
 > **我完全认同领导层判断：** AI 是能力扩展，不能替代人力；人的专业与审美是价值所在；同时应主动拥抱 AI。部分积极同事正**持续测试 AI 与项目周期的融入**，寻找效率与质量的平衡，**值得肯定**。
 >
-> 内地高端住宅**反复修改**有相当大部分来自行业机制等外部因素（附件一）；越南团队处于 2TA **AI 深度试用期**（附件二）。项目负责人应在日报中区分修改来源与 AI 试错，**勿把行业性变更或转型期试错误判为内部低效**。
+> 内地高端住宅**反复修改**有相当大部分来自行业机制等外部因素；越南团队处于 2TA **AI 深度试用期**，总图路径与工具边界等问题突出。项目负责人应在日报中区分修改来源与 AI 试错，**勿把行业性变更或转型期试错误判为内部低效**。
 >
-> 日报将采用**滚动更新**的 1–2 周计划；**具体格式我将与 Janice 确认后推行**。将继续鼓励同事**分享 AI 心得**，避免重复踩坑。后期审图类工具**本人尚未验证**；概念类工具将随市场演进评估后汇报。
+> 日报将采用**滚动更新**的 1–2 周计划；**具体格式我将与 Janice 确认后推行**。将继续鼓励同事**分享 AI 心得**，避免重复踩坑。后期审图类工具**本人尚未验证**；相关平台将随市场演进评估后汇报。
 >
 > **建议领导审议：** ① 分级交付与客户档位；② 分阶段 AI 边界；③ 日报与返工记录；④ DD 节点最低交付包；⑤ 跨境信息同步与 AI 案例分享机制。
 >
@@ -324,4 +299,4 @@ DD 节点须对齐**最低交付标准**与收款节点，避免为节点简化�
 
 ---
 
-*本文件为 IT 负责人协助 AI 提效的内部调研汇报。同事反馈见各节附件；工具链接待验证；不代表公司最终政策或采购决定。*
+*本文件为 IT 负责人协助 AI 提效的内部调研汇报。部分工具信息待验证；不代表公司最终政策或采购决定。*
