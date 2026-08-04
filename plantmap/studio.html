@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlantMap Studio · Planting Concept</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="studio.css" />
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html">
+      <span class="mark">PM</span>
+      <span class="brand-text"><b>PlantMap</b><small>PLANTING CONCEPT STUDIO</small></span>
+    </a>
+    <div class="spacer"></div>
+    <input id="projectName" class="project-name" value="Untitled Planting Board" />
+    <button type="button" class="topbtn" id="langBtn">中文</button>
+    <button type="button" class="topbtn" id="importJsonBtn">IMPORT</button>
+    <button type="button" class="topbtn" id="exportJsonBtn">SAVE JSON</button>
+    <button type="button" class="topbtn primary" id="exportPngBtn">EXPORT PNG</button>
+    <input id="importJsonFile" type="file" accept="application/json" hidden />
+    <input id="baseFile" type="file" accept="image/*" hidden />
+  </header>
+
+  <div class="shell">
+    <aside class="side">
+      <div class="section-title" data-i="base">Base plan</div>
+      <button type="button" class="side-btn primary" id="uploadBtn" data-i="upload">Upload site plan</button>
+      <button type="button" class="side-btn" id="clearBaseBtn" data-i="clearBase">Clear base</button>
+
+      <div class="section-title" data-i="tools">Tools</div>
+      <div class="tool-row">
+        <button type="button" class="tool on" data-tool="draw" data-i="draw">Draw zone</button>
+        <button type="button" class="tool" data-tool="select" data-i="select">Select</button>
+        <button type="button" class="tool" data-tool="pan" data-i="pan">Pan</button>
+      </div>
+      <p class="hint" data-i="drawHint">Click to add points. Double-click or Enter to close polygon. Esc cancels.</p>
+
+      <div class="section-title" data-i="legend">Planting legend</div>
+      <div class="legend" id="legend"></div>
+
+      <div class="section-title" data-i="note">Concept note</div>
+      <textarea id="note" rows="3" data-i-placeholder="notePh" placeholder="e.g. Dense canopy along south edge for shade; lawn kept open for gathering."></textarea>
+
+      <div class="section-title" data-i="zones">Zones</div>
+      <div id="zoneList" class="zone-list"></div>
+      <button type="button" class="side-btn danger" id="deleteZoneBtn" data-i="deleteZone">Delete selected</button>
+    </aside>
+
+    <main class="stage">
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="board"></canvas>
+        <div class="empty" id="emptyState">
+          <strong data-i="emptyTitle">Drop a site plan to start</strong>
+          <span data-i="emptyBody">Upload a plan image, then paint planting concept zones on top.</span>
+        </div>
+      </div>
+      <div class="status">
+        <span id="statusText">Ready</span>
+        <span id="zoomText">100%</span>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="studio.js"></script>
+</body>
+</html>
