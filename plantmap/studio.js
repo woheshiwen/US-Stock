@@ -14,26 +14,30 @@
     zh: {
       base: '底图', upload: '上传场地底图', clearBase: '清除底图',
       tools: '工具', draw: '绘制分区', select: '选择', pan: '平移',
-      drawHint: '单击加点，双击或 Enter 闭合多边形，Esc 取消。',
+      drawHint: '单击加点，双击或 Enter 闭合多边形，Esc 取消。选中后可一键圆角。',
       legend: '种植图例', note: '概念备注',
       notePh: '例如：南侧密植乔木遮阴；中部草坪保持开敞。',
       zones: '分区列表', deleteZone: '删除选中分区',
+      roundZone: '一键圆角', sharpZone: '取消圆角',
       emptyTitle: '先放一张场地底图', emptyBody: '上传总平或截图，然后在上面画种植概念区。',
       ready: '就绪', drawing: '绘制中…', selected: '已选中',
       saved: '项目已保存', exported: 'PNG 已导出', imported: '项目已导入',
-      needPoly: '至少需要 3 个点', deleted: '分区已删除'
+      needPoly: '至少需要 3 个点', deleted: '分区已删除',
+      needSelect: '请先选中一个分区', rounded: '已圆角', sharpened: '已取消圆角'
     },
     en: {
       base: 'Base plan', upload: 'Upload site plan', clearBase: 'Clear base',
       tools: 'Tools', draw: 'Draw zone', select: 'Select', pan: 'Pan',
-      drawHint: 'Click to add points. Double-click or Enter to close. Esc cancels.',
+      drawHint: 'Click to add points. Double-click or Enter to close. Esc cancels. Select a zone to round corners.',
       legend: 'Planting legend', note: 'Concept note',
       notePh: 'e.g. Dense canopy on the south edge; lawn kept open in the center.',
       zones: 'Zones', deleteZone: 'Delete selected',
+      roundZone: 'Round corners', sharpZone: 'Sharp corners',
       emptyTitle: 'Drop a site plan to start', emptyBody: 'Upload a plan image, then paint planting concept zones.',
       ready: 'Ready', drawing: 'Drawing…', selected: 'Selected',
       saved: 'Project saved', exported: 'PNG exported', imported: 'Project imported',
-      needPoly: 'Need at least 3 points', deleted: 'Zone deleted'
+      needPoly: 'Need at least 3 points', deleted: 'Zone deleted',
+      needSelect: 'Select a zone first', rounded: 'Corners rounded', sharpened: 'Corners sharpened'
     }
   };
 
@@ -117,8 +121,12 @@
     list.innerHTML = zones.map((z, i) => {
       const meta = typeMeta(z.type);
       const label = lang === 'zh' ? meta.zh : meta.en;
+      const r = Number(z.cornerRadius) || 0;
+      const tip = r > 0
+        ? (lang === 'zh' ? `圆角 ${Math.round(r)}` : `R${Math.round(r)}`)
+        : `${z.points.length} pts`;
       return `<div class="zone-row ${selectedId === z.id ? 'on' : ''}" data-id="${z.id}">
-        <b>${i + 1}. ${label}</b><span>${z.points.length} pts</span>
+        <b>${i + 1}. ${label}</b><span>${tip}</span>
       </div>`;
     }).join('');
     $$('.zone-row[data-id]').forEach((row) => {
@@ -169,11 +177,109 @@
     view.y = (rect.height - baseImage.height * view.scale) / 2;
   }
 
-  function drawPolygonPath(points, close = true) {
+  function drawPolygonPath(targetCtx, points, close = true) {
     if (!points.length) return;
-    ctx.moveTo(points[0].x, points[0].y);
-    for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
-    if (close && points.length > 2) ctx.closePath();
+    targetCtx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) targetCtx.lineTo(points[i].x, points[i].y);
+    if (close && points.length > 2) targetCtx.closePath();
+  }
+
+  /** Rounded closed polygon via quadratic curves at each vertex. */
+  function drawRoundedPolygonPath(targetCtx, points, radius) {
+    const n = points.length;
+    if (n < 3) {
+      drawPolygonPath(targetCtx, points, true);
+      return;
+    }
+    const rWant = Math.max(0, Number(radius) || 0);
+    if (rWant <= 0) {
+      drawPolygonPath(targetCtx, points, true);
+      return;
+    }
+
+    for (let i = 0; i < n; i++) {
+      const prev = points[(i - 1 + n) % n];
+      const curr = points[i];
+      const next = points[(i + 1) % n];
+      const d1 = Math.hypot(curr.x - prev.x, curr.y - prev.y);
+      const d2 = Math.hypot(next.x - curr.x, next.y - curr.y);
+      if (d1 < 1e-6 || d2 < 1e-6) continue;
+      const r = Math.min(rWant, d1 * 0.45, d2 * 0.45);
+      const p1 = {
+        x: curr.x - ((curr.x - prev.x) / d1) * r,
+        y: curr.y - ((curr.y - prev.y) / d1) * r
+      };
+      const p2 = {
+        x: curr.x + ((next.x - curr.x) / d2) * r,
+        y: curr.y + ((next.y - curr.y) / d2) * r
+      };
+      if (i === 0) targetCtx.moveTo(p1.x, p1.y);
+      else targetCtx.lineTo(p1.x, p1.y);
+      targetCtx.quadraticCurveTo(curr.x, curr.y, p2.x, p2.y);
+    }
+    targetCtx.closePath();
+  }
+
+  function zonePath(targetCtx, zone) {
+    const r = Number(zone.cornerRadius) || 0;
+    if (r > 0) drawRoundedPolygonPath(targetCtx, zone.points, r);
+    else drawPolygonPath(targetCtx, zone.points, true);
+  }
+
+  /** Sensible default radius from average edge length (planting-bed look). */
+  function autoCornerRadius(points) {
+    if (!points || points.length < 3) return 0;
+    let sum = 0;
+    let minEdge = Infinity;
+    for (let i = 0; i < points.length; i++) {
+      const a = points[i];
+      const b = points[(i + 1) % points.length];
+      const len = Math.hypot(b.x - a.x, b.y - a.y);
+      sum += len;
+      if (len > 0) minEdge = Math.min(minEdge, len);
+    }
+    const avg = sum / points.length;
+    if (!Number.isFinite(minEdge) || minEdge <= 0) return Math.max(12, avg * 0.18);
+    return Math.max(8, Math.min(avg * 0.22, minEdge * 0.42));
+  }
+
+  function getSelectedZone() {
+    return zones.find((z) => z.id === selectedId) || null;
+  }
+
+  function roundSelectedZone() {
+    const z = getSelectedZone();
+    if (!z) {
+      toast(t('needSelect'));
+      return;
+    }
+    const next = autoCornerRadius(z.points);
+    // Re-click cycles: soft → softer → soft again
+    const cur = Number(z.cornerRadius) || 0;
+    if (cur > 0 && Math.abs(cur - next) < 1) {
+      z.cornerRadius = next * 1.55;
+    } else if (cur > next * 1.3) {
+      z.cornerRadius = next;
+    } else {
+      z.cornerRadius = next;
+    }
+    renderZoneList();
+    persist();
+    draw();
+    toast(t('rounded'));
+  }
+
+  function sharpenSelectedZone() {
+    const z = getSelectedZone();
+    if (!z) {
+      toast(t('needSelect'));
+      return;
+    }
+    z.cornerRadius = 0;
+    renderZoneList();
+    persist();
+    draw();
+    toast(t('sharpened'));
   }
 
   function draw() {
@@ -190,7 +296,7 @@
     zones.forEach((z) => {
       const meta = typeMeta(z.type);
       ctx.beginPath();
-      drawPolygonPath(z.points, true);
+      zonePath(ctx, z);
       ctx.fillStyle = meta.fill;
       ctx.fill();
       ctx.lineWidth = (selectedId === z.id ? 2.5 : 1.5) / view.scale;
@@ -212,7 +318,7 @@
     if (draft.length) {
       const meta = typeMeta(activeType);
       ctx.beginPath();
-      drawPolygonPath(draft, false);
+      drawPolygonPath(ctx, draft, false);
       ctx.strokeStyle = meta.color;
       ctx.lineWidth = 1.8 / view.scale;
       ctx.setLineDash([6 / view.scale, 5 / view.scale]);
@@ -254,7 +360,7 @@
       toast(t('needPoly'));
       return;
     }
-    zones.push({ id: uid(), type: activeType, points: draft.slice() });
+    zones.push({ id: uid(), type: activeType, points: draft.slice(), cornerRadius: 0 });
     draft = [];
     selectedId = zones[zones.length - 1].id;
     renderZoneList();
@@ -287,7 +393,11 @@
   function applyProject(data, announce) {
     $('#projectName').value = data.name || 'Untitled Planting Board';
     $('#note').value = data.note || '';
-    zones = Array.isArray(data.zones) ? data.zones : [];
+    zones = (Array.isArray(data.zones) ? data.zones : []).map((z) => ({
+      ...z,
+      cornerRadius: Number(z.cornerRadius) || 0,
+      points: Array.isArray(z.points) ? z.points : []
+    }));
     selectedId = null;
     draft = [];
     baseDataUrl = data.baseDataUrl || '';
@@ -332,8 +442,7 @@
     zones.forEach((z) => {
       const meta = typeMeta(z.type);
       ex.beginPath();
-      z.points.forEach((p, i) => (i ? ex.lineTo(p.x, p.y) : ex.moveTo(p.x, p.y)));
-      ex.closePath();
+      zonePath(ex, z);
       ex.fillStyle = meta.fill;
       ex.fill();
       ex.strokeStyle = meta.color;
@@ -522,6 +631,9 @@
     toast(t('deleted'));
   };
 
+  $('#roundZoneBtn').onclick = roundSelectedZone;
+  $('#sharpZoneBtn').onclick = sharpenSelectedZone;
+
   $('#note').addEventListener('change', persist);
   $('#projectName').addEventListener('change', persist);
 
@@ -564,6 +676,10 @@
     if (e.key === 'Escape') { draft = []; draw(); setStatus(t('ready')); }
     if ((e.key === 'Backspace' || e.key === 'Delete') && selectedId && tool === 'select') {
       $('#deleteZoneBtn').click();
+    }
+    if ((e.key === 'r' || e.key === 'R') && selectedId && !e.metaKey && !e.ctrlKey) {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag !== 'INPUT' && tag !== 'TEXTAREA') roundSelectedZone();
     }
   });
   window.addEventListener('keyup', (e) => {
