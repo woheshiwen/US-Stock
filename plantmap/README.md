@@ -24,6 +24,7 @@ python3 -m http.server 8765
 
 - Upload site plan as base
 - Draw zones: canopy, shrub, groundcover, lawn, edge/wetland, existing keep
+- One-click rounded corners on selected zone (尖角 → 种植床圆角)
 - Pan / zoom, concept notes
 - Export PNG with legend
 - Save / import JSON (`plantmap.project.v1`)
