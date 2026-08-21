@@ -36,19 +36,21 @@ window.FlowLive = (function () {
   var IDS = "bitcoin,ethereum,solana,ripple,binancecoin,dogecoin";
   var SRC = {
     /* ---- CoinGecko(串行组) ---- */
+    /* GitHub Pages 无 /api/price 后端:直接用 CoinGecko(浏览器 CORS 可用)。
+       本地/Netlify 仍可用 serve.py 或 functions/price.js 做多所聚合。 */
     price: {
-      g: "x", ttl: 3e4, maxAge: 3e5, retry: 1,
-      url: "/api/price",
+      g: "cg", ttl: 3e4, maxAge: 3e5, retry: 1,
+      url: CG + "/simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_change=true",
       parse: function (j) {
-        var out = {}, assets = (j && j.assets) || {}, map = { BTC: "bitcoin", ETH: "ethereum" }, k, d;
-        for (k in map) {
-          d = assets[k];
-          if (d && isFinite(+d.price) && +d.price > 0) out[map[k]] = {
-            px: +d.price,
-            chg: d.change_24h == null || !isFinite(+d.change_24h) ? null : +d.change_24h,
-            sources: d.sources || [],
-            confidence: d.confidence || "single",
-            asOf: j.as_of || null
+        var out = {}, row, id, map = { bitcoin: "bitcoin", ethereum: "ethereum" };
+        for (id in map) {
+          row = j && j[id];
+          if (row && isFinite(+row.usd) && +row.usd > 0) out[map[id]] = {
+            px: +row.usd,
+            chg: row.usd_24h_change == null || !isFinite(+row.usd_24h_change) ? null : +row.usd_24h_change,
+            sources: ["CoinGecko"],
+            confidence: "single",
+            asOf: null
           };
         }
         if (!out.bitcoin && !out.ethereum) return null;

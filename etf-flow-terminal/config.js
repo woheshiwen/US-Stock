@@ -12,7 +12,7 @@ window.SITE_CONFIG = {
     site_name_cn: "资金流向终端",
     title: "ETF Flow Terminal · BTC/ETH 机构资金流与市场全景",
     description: "比特币、以太坊现货 ETF 净流向,叠加行情、情绪、链上、衍生品、跨所价差、DeFi 与币股持仓;只呈现当前可用信息,ETF 流量更新至最近完整交易日。",
-    site_url: "",  // 部署后填正式域名；本地可留空
+    site_url: "https://woheshiwen.github.io/US-Stock",
     og_locale: "zh_CN",
     lang_default: "zh"
   },
