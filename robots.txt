@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+# 名单控制台不进索引;数据面板欢迎抓取
