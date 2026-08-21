@@ -2,7 +2,18 @@
 
 结构与交互复刻自公开站点 [kzgflow.com](https://www.kzgflow.com/)。完整架构说明见 [DECONSTRUCTION.md](./DECONSTRUCTION.md)。
 
-## 快速开始
+## 在线访问（GitHub Pages）
+
+部署后打开：
+
+**https://woheshiwen.github.io/US-Stock/**
+
+若打不开：仓库 [Settings → Pages](https://github.com/woheshiwen/US-Stock/settings/pages) → Build and deployment → Source 选 **Deploy from a branch**，Branch 选 **`gh-pages` / `(root)`** → Save。  
+之后每次更新本目录或合并 PR，Actions 工作流 `Deploy ETF Flow Terminal` 会自动刷新站点。
+
+源码浏览：<https://github.com/woheshiwen/US-Stock/tree/cursor/kzgflow-clone-9437/etf-flow-terminal>
+
+## 快速开始（本地）
 
 ```bash
 python3 serve.py
