@@ -1,0 +1,30 @@
+name: Deploy ETF Flow Terminal (GitHub Pages)
+
+on:
+  push:
+    branches: [main, cursor/kzgflow-clone-9437]
+    paths:
+      - "etf-flow-terminal/**"
+      - ".github/workflows/deploy-etf-flow-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: etf-flow-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish etf-flow-terminal to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./etf-flow-terminal
+          force_orphan: true
+          commit_message: "deploy: ETF Flow Terminal"
