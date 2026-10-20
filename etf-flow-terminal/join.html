@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!-- join.html — 注册入口缓冲页
+     定位:不是介绍页,只是一次呼吸。用户点入口 → 这里停一下 → 自动打开注册页。
+     页面上不出现链接、不出现邀请码、不做二次推销。
+     微信等内置浏览器打不开外域,由 assets/wechat.js 接管为「复制 + 在浏览器打开」二段引导。
+     链接真源:config.js → links.entry.url -->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>正在打开…</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=2.5.2">
+  <script src="config.js?v=2.5.2"></script>
+  <script>(function(){var C=window.SITE_CONFIG,t=(C.flags.dark_mode_default?C.theme_dark:C.theme_light),r=document.documentElement;
+  for(var k in t)r.style.setProperty("--"+k.replace(/_/g,"-"),t[k]);
+  r.style.setProperty("--font-sans",C.fonts.sans);r.style.setProperty("--font-mono",C.fonts.mono);
+  if(C.flags.dark_mode_default)r.setAttribute("data-theme","dark");})();</script>
+  <link rel="stylesheet" href="assets/styles.css?v=2.5.2">
+</head>
+<body class="jb-body">
+  <noscript><p style="padding:24px;text-align:center;font:14px/1.6 sans-serif">请启用 JavaScript。Please enable JavaScript.</p></noscript>
+  <main class="jb" id="jb"></main>
+  <script src="data.js?v=2.5.2"></script>
+  <script src="assets/capture.js?v=2.5.2"></script>
+  <script src="assets/wechat.js?v=2.5.2"></script>
+  <script src="assets/join.js?v=2.5.2"></script>
+</body>
+</html>

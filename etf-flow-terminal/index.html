@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!-- ⚠ 页面布局骨架:后续维护勿改结构。
+     文案/链接/配色/通道改 config.js,数据改 data.js,模块增删改 assets/panels.js。
+     加载顺序有依赖:config → data → metrics → live → capture → charts → charts2 → panels → app -->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 以下 title/description 为爬虫兜底,运行时以 config.js meta 为准同步覆盖 -->
+  <title>ETF Flow Terminal · BTC/ETH 机构资金流与市场全景</title>
+  <meta name="description" content="比特币、以太坊现货 ETF 净流向,叠加行情、情绪、链上、衍生品、跨所价差、DeFi 与币股持仓;只呈现当前可用信息,ETF 流量更新至最近完整交易日。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="">
+  <meta property="og:title" content="ETF Flow Terminal · BTC/ETH 机构资金流与市场全景">
+  <meta property="og:description" content="机构资金流向 + 行情、情绪、链上、衍生品、跨所、DeFi 与币股持仓;只呈现当前可用信息。">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=2.5.2">
+  <link rel="preconnect" href="https://api.coingecko.com" crossorigin>
+  <link rel="preconnect" href="https://mempool.space" crossorigin>
+  <script src="config.js?v=2.5.2"></script>
+  <script>/* 将 config 配色 token 注入 :root(唯一颜色真源;styles.css 内同名值仅为无 JS 兜底) */
+  (function(){var C=window.SITE_CONFIG,t=(C.flags.dark_mode_default?C.theme_dark:C.theme_light),r=document.documentElement;
+  for(var k in t)r.style.setProperty("--"+k.replace(/_/g,"-"),t[k]);
+  r.style.setProperty("--font-sans",C.fonts.sans);r.style.setProperty("--font-mono",C.fonts.mono);
+  if(C.flags.dark_mode_default)r.setAttribute("data-theme","dark");})();</script>
+  <link rel="stylesheet" href="assets/styles.css?v=2.5.2">
+</head>
+<body>
+  <noscript><p style="padding:16px;text-align:center;font:14px/1.6 sans-serif">本页面图表需要启用 JavaScript。This page requires JavaScript.</p></noscript>
+
+  <div class="ticker" id="ticker" aria-label="market ticker"></div>
+
+  <header class="wrap header" id="header"></header>
+
+  <main class="wrap">
+    <section class="hero" id="hero"></section>
+    <section class="stats" id="stats" aria-label="key stats"></section>
+
+    <div id="flows">
+      <section class="card chart-card" id="card-btc" data-screen-label="BTC flows"></section>
+      <section class="card chart-card" id="card-eth" data-screen-label="ETH flows"></section>
+      <div class="duo">
+        <section class="card" id="card-ratio" data-screen-label="Crypto vs equity"></section>
+        <section class="card" id="card-table" data-screen-label="Sessions table"></section>
+      </div>
+    </div>
+
+    <section id="free-zone" data-screen-label="Market wide">
+      <div class="zone-head" id="free-head"></div>
+      <div class="pgrid" id="free-panels"></div>
+      <details class="deep-more free-more" id="free-more">
+        <summary><span id="free-more-label"></span><small id="free-more-hint"></small></summary>
+        <div class="pgrid" id="free-panels-b"></div>
+      </details>
+    </section>
+
+    <!-- 入口带(BA,共两条)由 app.js 测量页面高度后插入到 1/3 与 2/3 位置,
+         因为面板区重渲染会清空子节点——参见 app.js → placeEntryBands() -->
+
+    <section class="locked" id="locked" data-screen-label="Advanced data"></section>
+  </main>
+
+  <footer class="wrap footer" id="footer"></footer>
+
+  <script src="data.js?v=2.5.2"></script>
+  <script src="assets/wechat.js?v=2.5.2"></script>
+  <script src="assets/metrics.js?v=2.5.2"></script>
+  <script src="assets/live.js?v=2.5.2"></script>
+  <script src="assets/capture.js?v=2.5.2"></script>
+  <script src="assets/charts.js?v=2.5.2"></script>
+  <script src="assets/charts2.js?v=2.5.2"></script>
+  <script src="assets/panels.js?v=2.5.2"></script>
+  <script src="assets/app.js?v=2.5.2"></script>
+</body>
+</html>
