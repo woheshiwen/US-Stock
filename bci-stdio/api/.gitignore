@@ -1,0 +1,7 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+data/outputs/*
+!data/outputs/.gitkeep
+data/stdio.db
